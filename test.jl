@@ -1,2 +1,6 @@
-dts = [ DateTime()+Dates.Millisecond(i) for i=1:1000000 ]
-open(f->serialize(f,dts),"test.jls","w")
+f(x) = begin
+  x = x + 3
+  return x
+end
+
+print(f(3))

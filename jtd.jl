@@ -4,12 +4,12 @@ dataFile = "$(homedir())/.jtodo.jls"
 pending = '✘'
 isdone = '✔'
 
-function save(data)
+save(data) = begin
   open(f->serialize(f, data), dataFile, "w")
 end
 
-function load()
-  return open(deserialize, dataFile)
+load() = begin
+  open(deserialize, dataFile)
 end
 
 if !isfile(dataFile)
@@ -19,7 +19,7 @@ end
 todos = load()
 
 
-function ls(args)
+ls(args) = begin
   for (i, todo) in enumerate(todos) 
     item = "$i $todo \n"
     len = length(args)
@@ -36,16 +36,16 @@ function ls(args)
   end
 end
 
-function final()
+final() = begin
   ls([])
   save(todos)
 end
 
-function intify(id)
-  return parse(Int, id)
+intify(id) = begin
+  parse(Int, id)
 end
 
-function ad(args)
+ad(args) = begin
   for i = 1:length(args)
     newTodo = "| $pending $(args[i])"
     push!(todos, newTodo)
@@ -54,7 +54,7 @@ function ad(args)
   final()
 end
 
-function rm(args)
+rm(args) = begin
   sort!(args, rev=true)
 
   for arg in args
@@ -64,7 +64,7 @@ function rm(args)
   final()
 end
 
-function ch(args)
+ch(args) = begin
   (id, cont) = args
   intid = intify(id)
 
@@ -77,14 +77,14 @@ function ch(args)
   final()
 end
 
-function sw(args)
+sw(args) = begin
   (id1, id2) = map(intify, args)
   (todos[id1], todos[id2]) = [todos[id2], todos[id1]]
 
   final()
 end
 
-function tg(args)
+tg(args) = begin
   id = intify(args[1])
 
   if search(todos[id], pending) > 0
@@ -96,7 +96,7 @@ function tg(args)
   final()
 end
 
-function cl(args)
+cl(args) = begin
   len = length(todos)
 
   while len > 0
@@ -109,7 +109,7 @@ function cl(args)
   final()
 end
 
-function usage()
+usage() = begin
   str = """
     ls => list
     ad => add
@@ -123,7 +123,7 @@ function usage()
   println(str)
 end
 
-function handler(args)
+handler(args) = begin
   cmd = args[1]
   newArgs = args[2:end]
   dict = Dict(
@@ -139,7 +139,7 @@ function handler(args)
   get(dict, cmd, usage)(newArgs)
 end
 
-function main()
+main() = begin
   if length(ARGS) == 0
     usage()
   else
