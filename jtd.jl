@@ -1,17 +1,22 @@
 #!/usr/local/bin/julia -q --color=yes
 
-using JLD
-
-dataFile = "$(homedir())/.jtodo.jld"
+dataFile = "$(homedir())/.jtodo.jls"
 pending = '✘'
 isdone = '✔'
 
-if !isfile(dataFile)
-  todos = []
-  save(dataFile, "todos", todos)
+function save(data)
+  open(f->serialize(f, data), dataFile, "w")
 end
 
-todos = load(dataFile, "todos")
+function load()
+  return open(deserialize, dataFile)
+end
+
+if !isfile(dataFile)
+  save([])
+end
+
+todos = load()
 
 
 function ls(args)
@@ -33,7 +38,7 @@ end
 
 function final()
   ls([])
-  save(dataFile, "todos", todos)
+  save(todos)
 end
 
 function intify(id)
