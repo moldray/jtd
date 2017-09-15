@@ -15,52 +15,21 @@ todos = load(dataFile, "todos")
 
 
 function ls(args)
-  len = length(args)
+  for (i, todo) in enumerate(todos) 
+    item = "$i $todo \n"
+    len = length(args)
 
-  function lsP()
-    for (i, todo) in enumerate(todos) 
-      item = "$i $todo \n"
-      if search(todo, pending) >0 
+    if search(todo, pending) > 0 
+      if len == 0 || args[1] != "-d"
         print_with_color(:red, item)
       end
-    end
-  end
-
-  if len ==0
-    return lsP()
-  end
-
-  arg = args[1]
-
-  function lsD()
-    for (i, todo) in enumerate(todos) 
-      item = "$i $todo \n"
-      if search(todo, isdone) >0 
+    else
+      if len > 0 && args[1] != "-p"
         print_with_color(:green, item)
       end
     end
-  end
-
-  function lsA()
-    for (i, todo) in enumerate(todos) 
-      item = "$i $todo \n"
-      if search(todo, pending) >0 
-        print_with_color(:red, item)
-      else
-        print_with_color(:green, item)
-      end
-    end
-  end
-
-  if arg == "-p"
-    lsP()
-  elseif arg == "-d"
-    lsD()
-  else
-    lsA()
   end
 end
-
 
 function final()
   ls([])
@@ -136,32 +105,38 @@ function cl(args)
   final()
 end
 
+function usage()
+  str = """
+    ls => list
+    ad => add
+    rm => remove
+    ch => change
+    sw => swap
+    tg => toggle
+    cl => clean
+  """
+  
+  println(str)
+end
 
 function handler(args)
   cmd = args[1]
   newArgs = args[2:end]
+  dict = Dict(
+    "ls" => ls,
+    "ad" => ad,
+    "rm" => rm,
+    "ch" => ch,
+    "sw" => sw,
+    "tg" => tg,
+    "cl" => cl,
+  )
 
-  if cmd == "ls"
-    ls(newArgs)
-  elseif cmd== "ad"
-    ad(newArgs)
-  elseif cmd == "rm"
-    rm(newArgs)
-  elseif cmd == "ch"
-    ch(newArgs)
-  elseif cmd == "sw"
-    sw(newArgs)
-  elseif cmd == "tg"
-    tg(newArgs)
-  elseif cmd == "cl"
-    cl(newArgs)
-  else
-    println("ls:list, ad:add, rm:remove, ch:change, sw:swap, tg:toggle, cl:clean")
-  end
+  get(dict, cmd, usage)(newArgs)
 end
 
 if length(ARGS) == 0
-  println("args is needed.")
+  usage()
 else
   handler(ARGS)
 end
