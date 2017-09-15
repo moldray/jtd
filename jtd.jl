@@ -140,8 +140,12 @@ function handler(args)
   get(dict, cmd, usage)(newArgs)
 end
 
-if length(ARGS) == 0
-  usage()
-else
-  handler(ARGS)
+function main()
+  if length(ARGS) == 0
+    usage()
+  else
+    handler(ARGS)
+  end
 end
+
+main()
