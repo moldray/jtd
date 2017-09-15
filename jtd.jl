@@ -1,17 +1,17 @@
 #!/usr/local/bin/julia -q --color=yes
 
-using JLD2, FileIO
+using JLD
 
-dataFile = "$(homedir())/.jtodo.jld2"
+dataFile = "$(homedir())/.jtodo.jld"
 pending = '✘'
 isdone = '✔'
 
 if !isfile(dataFile)
   todos = []
-  @save dataFile todos
+  save(dataFile, "todos", todos)
 end
 
-@load dataFile todos
+todos = load(dataFile, "todos")
 
 
 function ls(args)
