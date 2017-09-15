@@ -97,14 +97,13 @@ function tg(args)
 end
 
 function cl(args)
-  i = 0
+  len = length(todos)
 
-  while i < length(todos)
-    i = i + 1
-    if(search(todos[i], isdone) > 0)
-      splice!(todos, i)
-      i = i - 1
+  while len > 0
+    if(search(todos[len], isdone) > 0)
+      splice!(todos, len)
     end
+    len = len - 1
   end
 
   final()
