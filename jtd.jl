@@ -1,6 +1,6 @@
 #!/usr/local/bin/julia -q --color=yes
 
-dataFile = "$(homedir())/.jtodo.jls"
+dataFile = Pkg.dir(homedir(), ".jtodo.jls")
 pending = '✘'
 isdone = '✔'
 
@@ -109,7 +109,7 @@ cl(args) = begin
   final()
 end
 
-usage() = begin
+usage(args) = begin
   str = """
     ls => list
     ad => add
